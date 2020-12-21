@@ -6,8 +6,13 @@ dhclient -r
 dhclient -v
 systemctl start docker 
 oc cluster up --base-dir="/home/wasadmin/.occluster"
+oc whoami
 oc login -u system:admin
 oc whoami
-oc cluster status
+oc projects
+oc project myproject
+oc status
+docker images
 oc new-app --docker-image="docker.io/openshift/hello-openshift"
 oc status
+oc get pods
