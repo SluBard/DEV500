@@ -16,3 +16,17 @@ docker images
 oc new-app --docker-image="docker.io/openshift/hello-openshift"
 oc status
 oc get pods
+oc describe svc/hello-openshift
+oc expose svc/hello-openshift --name=hello-openshift --hostname=hello-openshift.localhost
+oc status
+oc get pods
+oc scale dc/hello-openshift --replicas=2
+sleep 60
+oc scale dc/hello-openshift --replicas=1
+oc get pods
+read -p "Hit Enter to remove hello-openshift"
+oc delete svc/hello-openshift
+oc delete dc/hello-openshift
+oc get pods
+oc status
+
