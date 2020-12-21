@@ -1,0 +1,13 @@
+cd ~
+setenforce 0
+systemctl stop firewalld
+systemctl disable firewalld
+dhclient -r
+dhclient -v
+systemctl start docker 
+oc cluster up --base-dir="/home/wasadmin/.occluster"
+oc login -u system:admin
+oc whoami
+oc cluster status
+oc new-app --docker-image="docker.io/openshift/hello-openshift"
+oc status

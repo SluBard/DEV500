@@ -1,0 +1,18 @@
+setenforce 0
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl start docker
+oc cluster up --base-dir="/home/wasadmin/.occluster"
+oc login -u system:admin
+cd /home/wasadmin
+mkdir secrets
+echo servicedb > secrets/userid
+echo very-secret-1 > secrets/password
+oc get -o json secret/db-credentials
+oc create secret generic db-credentials --from-file=secrets
+oc get -o json secret/db-credentials
+cd /home/wasadmin/LabFiles/SecretsOnOpenShift/show-secrets/
+docker build -t node-secrets:v1.0 .
+oc new-app --docker-image=node-secrets:v1.0
+oc expose svc/node-secrets --name=node-secrets --hostname=node-secrets.localhost
+oc set volume dc/node-secrets --add --overwrite --name=secret-volume --type=secret --secret-name=db-credentials --mount-path=/var/secrets
